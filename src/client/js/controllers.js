@@ -1,29 +1,16 @@
-'use strict';
+﻿'use strict';
 var splitwise = angular.module("splitwise", [])
+var server = "http://localhost:3000/"
 
-var welcomeCtrlF = function($scope) {
-    $scope.bonjour = "ECHEC."
-
-    $scope.data = {}
-    $scope.response = {}
-    console.log("welcome")
-    
-    $scope.send = function () {
-	console.log("send")
-        var getting = $http({
-            method: 'GET',
-            url: '/bonjour',
-            data: $scope.data,
-            processData: false
-        })
+var welcomeCtrlF = function($scope, $http) {
+    $scope.bonjour = "ECHEC"
 	
-        getting.success(function (response) {
-            console.log(response)
-            $scope.response.data = response
-        });
-    }
-
-    $scope.bonjour = $scope.response.data
+	$http.get(server + "bonjour").
+		then(function(response) {
+			$scope.bonjour = response.data;
+		}, function(error) {
+			console.log(error);
+		});
 }
 
 splitwise.controller("WelcomeCtrl", welcomeCtrlF)
