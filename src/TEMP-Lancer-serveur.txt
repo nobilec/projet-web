@@ -1,7 +1,8 @@
 ﻿Comment faire ? Depuis ce répertoire :
 
 1) Lancer "mongod --dbpath server/resources"
-2) Lancer "node server/rest/app.js"
+2) Lancer "mongoimport --db splitwiseDB --collection splitwiseDB.json"
+3) Lancer "node server/rest/app.js"
 
 Ensuite, aller dans client/ et lancer index.html.
 Normalement, "BONJOUR" s'affiche.

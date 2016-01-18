@@ -1,0 +1,8 @@
+﻿<div ng-controller="AddTransactionCtrl">
+	<form>
+		<p>Vous, et : <span><input ng-model="usrs"/></span></p>
+		<textArea placeholder="Description" ng-model="desc"></textArea><br/>
+		<p><span><input placeholder="Montant" ng-model="amnt"/></span> €</p><br />
+		<input type="button" value="Ajouter" ng-click="send()"/>
+	</form>
+</div>
