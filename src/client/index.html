@@ -5,14 +5,14 @@
 		<title>Site</title>
 	</head>
 	<body>
-
-		<div ng-controller="WelcomeCtrl">
-			<h1>Le site.</h1>
-			<p>{{bonjour}}</p>
-		</div>
+		<h1>Le site.</h1>
 		
-		<input type="button" value="Ajouter une transaction" ng-click="atVisible=!atVisible"/>
-		<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"/>
+		<div ng-controller="ViewTransactionsCtrl">
+			<input type="button" value="Ajouter une transaction" ng-click="toogle()"/>
+			<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"></div><!-- -->
+			
+			<div ng-include="'partials/viewTransactions.html'" ng-show="true"></div><!-- -->
+		</div>
 		
 		<script src="./bower_components/angular/angular.js"></script>
 		<script src="./bower_components/jquery/dist/jquery.js"></script>
