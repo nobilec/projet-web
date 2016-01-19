@@ -3,12 +3,25 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Site</title>
+		<!-- Bootstrap Core CSS -->
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+		<link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+		<!-- Plugin CSS -->
+		<link rel="stylesheet" href="css/animate.min.css" type="text/css">
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="css/creative.css" type="text/css">
 	</head>
 	<body>
-		<h1>Le site.</h1>
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Le site.</a>
+				</div>
+			</div>
+		</nav>
 		
 		<div ng-controller="ViewTransactionsCtrl">
-			<input type="button" value="Ajouter une transaction" ng-click="toogle()"/>
+			<input class="btn-info" type="button" value="Ajouter une transaction" ng-click="toogle()"/>
 			<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"></div><!-- -->
 			
 			<div ng-include="'partials/viewTransactions.html'" ng-show="true"></div><!-- -->

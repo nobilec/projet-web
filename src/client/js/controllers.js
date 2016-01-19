@@ -2,7 +2,6 @@
 var splitwise = angular.module("splitwise", [])
 var server = "http://localhost:3000/"
 
-
 /*
  * A faire :
  * - Prendre en compte le pseudo de l'utilisateur

@@ -1,16 +1,16 @@
 ﻿<div ng-repeat="t in transactions track by t._id">
 	<form>
-		<table>
+		<table class="table">
 			<tr>
-				<td>
-					Total : {{t.amount}}€ Avec :
-					<div ng-repeat="u in t.userShare">
+				<td width="30%">
+					<b>Total : </b>{{t.amount}}€<b>, avec :</b>
+					<span ng-repeat="u in t.userShare">
 						{{u.pseudo}}
-					</div><br/>
+					</span><br/>
 					"{{t.description}}"<br/>
 				</td>
-				<td>	
-					<input type="button" value="Supprimer" ng-click="remove(t._id)"/>
+				<td width="70%">	
+					<input class="btn-danger" type="button" value="Effacer" ng-click="remove(t._id)"/>
 				</td>
 			</tr>
 		</table>
