@@ -12,6 +12,7 @@ var viewTransactionsCtrlF = function($scope, $http) {
 	$scope.transactions = []
 	
 	$scope.toogle = function(){
+		console.log("TOOGLE :" + $scope.atVisible)
 		$scope.atVisible = !$scope.atVisible
 		console.log($scope.atVisible)
 	}
