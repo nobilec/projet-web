@@ -200,6 +200,17 @@ app.post('/GetTransaction', function(req, res) {
 
 });
 
+app.get('/getTransactionShare/:pseudo', function(req, res) {
+    var query = transactionModel.find({ userShare :{ $elemMatch: {pseudo: req.params.pseudo}}});
+
+    query.exec(function (err, comms) {
+        if (err) { throw err; }
+        res.type('application/json');
+        res.json(comms);
+    });
+
+});
+
 app.post('/GetTransactionShare', function(req, res) {
     var query = transactionModel.find({ userShare :{ $elemMatch: {pseudo: req.body.pseudo}}});
 

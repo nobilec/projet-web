@@ -18,6 +18,7 @@
 		</nav>
 		
 		<div ng-controller="ViewTransactionsCtrl">
+			<div ng-include="'partials/totalBalance.html'" ng-show="true"></div>
 			<input class="btn-info" type="button" value="Ajouter une transaction" ng-click="toogle()"/>
 			<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"></div><!-- -->
 			

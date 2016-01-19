@@ -4,9 +4,10 @@
 			<tr>
 				<td width="30%">
 					<b>Total : </b>{{t.amount}}€<b>, avec :</b>
-					<span ng-repeat="u in t.userShare">
+					<span ng-repeat="u in t.userShare" ng-if="u.pseudo != myLogin">
 						{{u.pseudo}}
 					</span><br/>
+					<b>Vous avez payé </b>{{t.userShare[0].amount}}<b> €.</b><br/>
 					"{{t.description}}"<br/>
 				</td>
 				<td width="70%">	

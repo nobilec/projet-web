@@ -1,10 +1,18 @@
-﻿<table class="table">
+﻿<div ng-controller="TotalBalanceCtrl">
+<table class="table">
 	<tr>
 		<td>
+			<b>Bilan :</b><br/>
+			<h4>{{totalBalance}}</h4>
 		</td>
 		<td>
+			<b>Vous devez :</b><br/>
+			<h4>{{owedToOthers}}</h4>
 		</td>
 		<td>
+			<b>L'on vous doit :</b><br/>
+			<h4>{{owedToYou}}</h4>
 		</td>
 	</tr>
 </table>
+</div>
