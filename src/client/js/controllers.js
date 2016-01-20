@@ -37,6 +37,9 @@ var mainPageCtrlF = function($scope, $http) {
  *   connecté dans la requête GET.
  */
 var viewTransactionsCtrlF = function($scope, $http) {
+	$scope.whoOwesWho = ""
+	$scope.amountOwed = 0.0
+
 	$scope.remove = function(tId){
 		$http.get(server + "delTransaction/" + tId.toString()).then(
 			function(result){
@@ -53,12 +56,16 @@ var viewTransactionsCtrlF = function($scope, $http) {
 			})
 	}
 	
-	$http.get(server + "getTransactions/" + $scope.myLogin).then( 
-		function(result){
-			$scope.$parent.transactions = result.data
-		}, function(error){
-			console.log(error)
-		})
+	$scope.calc = function() {
+		$http.get(server + "getTransactions/" + $scope.myLogin).then( 
+			function(result){
+				$scope.$parent.transactions = result.data
+			}, function(error){
+				console.log(error)
+			})
+	}
+	$scope.$on("refreshViewTransactions", $scope.calc)
+	$scope.calc()
 }
 
 /* 
@@ -70,13 +77,27 @@ var viewTransactionsCtrlF = function($scope, $http) {
  */
 var addTransactionCtrlF = function($scope, $http) {
 	// Form values :
-	$scope.usrs = ""
-	$scope.desc = ""
-	$scope.amnt = 0.0
+	var init = function () {
+		$scope.usrs = ""
+		$scope.desc = ""
+		$scope.amnt = 0.0
+		$scope.paidByYou = true
+		$scope.payer = ""
+		$scope.errors = ""
+	}
+	init()
+	
+	$scope.payYou = function() {
+		$scope.paidByYou = true
+	}
+	$scope.payOther = function() {
+		$scope.paidByYou = false
+	}
 	
 	$scope.send = function() {
+		$scope.errors = ""
 		$scope.transaction = {
-			"userPaid" : $scope.$parent.myLogin,
+			"userPaid" : "",
 			"userShare" : [{"pseudo" : "", "amount" : 0.0}],
 			"groupeName" : "",
 			"description" : "",
@@ -84,28 +105,49 @@ var addTransactionCtrlF = function($scope, $http) {
 			"imageID" : "",
 			"amount" : 0.0
 		}
-		
 		var usrsTab = $scope.usrs.split(" ")
 		var amntDiv = $scope.amnt / (usrsTab.length + 1 )
-		$scope.transaction.userShare[0] =  { "pseudo" : $scope.$parent.myLogin, "amount" : amntDiv }
 		
-		for ( var i = 0; i < usrsTab.length; ++i )
-			$scope.transaction.userShare[i + 1] = { "pseudo" : usrsTab[i], "amount" : amntDiv }		
-		$scope.transaction.description = $scope.desc
-		$scope.transaction.amount = $scope.amnt
-		
-		$http.post(server + "addTransaction", $scope.transaction).then(
-			function(result) {
-				$scope.$parent.toogleAddTransaction()
-				$scope.$parent.transactions.push(result.data)
-				$scope.usrs = ""
-				$scope.desc = ""
-				$scope.amnt = 0.0
-				$scope.$root.$broadcast("refreshTotalBalance") // $root car non parent de TotalBalanceCtrl
-				$scope.$root.$broadcast("refreshDashboard")
-			}, function(error) {
-				console.log(error)
-			})
+		// Calcul des parts :
+		if ( $scope.paidByYou ) {
+			$scope.transaction.userPaid = $scope.$parent.myLogin
+			$scope.transaction.userShare[0] =  { "pseudo" : $scope.$parent.myLogin, "amount" : amntDiv }
+			for ( var i = 0; i < usrsTab.length; ++i )
+				$scope.transaction.userShare[i + 1] = { "pseudo" : usrsTab[i], "amount" : amntDiv }
+				
+		} else {
+			var payerIndex = usrsTab.indexOf($scope.payer)
+			
+			if ( payerIndex != - 1) {
+				$scope.transaction.userPaid = $scope.payer
+				$scope.transaction.userShare[0] = { "pseudo" : $scope.payer, "amount" : amntDiv }
+				$scope.transaction.userShare[1] = { "pseudo" : $scope.$parent.myLogin, "amount" : amntDiv }
+				for ( var i = 0; i < usrsTab.length; ++i ){
+					if ( i != payerIndex )
+						$scope.transaction.userShare[1] = { "pseudo" : usrsTab[i], "amount" : amntDiv }
+				}
+				
+			} else {
+				$scope.errors += "\nLe payeur n\'est pas dans la liste des participants."
+			}
+		}
+		// POST :
+		if ( $scope.errors == "") {
+			$scope.transaction.description = $scope.desc
+			$scope.transaction.amount = $scope.amnt
+			
+			$http.post(server + "addTransaction", $scope.transaction).then(
+				function(result) {
+					$scope.$parent.toogleAddTransaction()
+					//$scope.$parent.transactions.push(result.data)
+					init()
+					$scope.$root.$broadcast("refreshViewTransactions")
+					$scope.$root.$broadcast("refreshTotalBalance") // $root car non parent de TotalBalanceCtrl
+					$scope.$root.$broadcast("refreshDashboard")
+				}, function(error) {
+					console.log(error)
+				})
+		}
 	}
 }
 
@@ -116,6 +158,7 @@ var totalBalanceCtrlF = function($scope, $http){
 	$scope.owedToOthers = ""
 	$scope.owedToYou = ""
 	$scope.totalBalance = ""
+	
 	$scope.calc = function() {
 		var myLogin = $scope.$parent.myLogin
 		$http.get(server + "getTransactionShare/" + myLogin).then( 
@@ -148,9 +191,9 @@ var totalBalanceCtrlF = function($scope, $http){
 			
 			total = youreOwed - youOwe
 			
-			$scope.totalBalance = (total >= 0.0 ? "+ " : "-") + total.toString() + "€"
-			$scope.owedToOthers = (youOwe >= 0.0 ? "+ " : "-") + youOwe.toString() + "€"
-			$scope.owedToYou = (youreOwed >= 0.0 ? "+ " : "-") + youreOwed.toString() + "€"
+			$scope.totalBalance = (total >= 0.0 ? "+ " : "") + total.toString() + "€"
+			$scope.owedToOthers = (youOwe >= 0.0 ? "+ " : "") + youOwe.toString() + "€"
+			$scope.owedToYou = (youreOwed >= 0.0 ? "+ " : "") + youreOwed.toString() + "€"
 		}, function(error){
 			console.log(error)
 		})
@@ -168,6 +211,9 @@ var dashboardCtrlF = function($scope, $http) {
 
 	$scope.calc = function() {
 		var myLogin = $scope.$parent.myLogin
+		$scope.owedBy = []
+		$scope.owingTo = []
+		
 		$http.get(server + "getTransactionShare/" + myLogin).then( 
 		function(result){
 			var trns = result.data
@@ -187,7 +233,7 @@ var dashboardCtrlF = function($scope, $http) {
 					for ( var j = 1; j < usrShr.length; ++j ){
 						payer = usrShr[j]
 						if ( payer.pseudo == myLogin )
-							$scope.owedTo.push( { "pseudo" : usrShr[0].pseudo, "amount" : payer.amount } )
+							$scope.owingTo.push( { "pseudo" : usrShr[0].pseudo, "amount" : payer.amount } )
 					}
 				}
 			}

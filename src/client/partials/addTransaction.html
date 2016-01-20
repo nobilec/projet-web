@@ -3,7 +3,14 @@
 		<table class="table-add-transaction">
 			<tr><td>Vous, et : <input ng-model="usrs"/> pour <input placeholder="Montant" ng-model="amnt"/> €</td></tr>
 			<tr><td><textArea placeholder="Description" ng-model="desc"></textArea></td></tr>
+			<tr><td>
+				Payé par : 
+					<input type="radio" name="who" value="Vous" checked="true" ng-click="payYou()"/> Vous
+					<input type="radio" name="who" value="Autre" ng-click="payOther()"/> Autre :
+					<input ng-disabled="paidByYou" ng-model="payer" />
+			</td></tr>
 			<tr><td><input class="btn-success" type="button" value="Ajouter" ng-click="send()"/></td></tr>
 		</table>
+		<div class="errors" >{{errors}}</div>
 	</form>
 </div>
