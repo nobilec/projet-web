@@ -6,11 +6,16 @@
 	vertical-align: top;
 }
 
-.table-home .left-panel{
+.table-home .left-panel {
+	width: 15%;
+}
+
+.table-home .left-panel input{
+	width: 100%;
 }
 
 .table-home .main-board{
-	width: 100%;
+	width: 85%;
 }
 
 .table-add-transaction{
@@ -18,5 +23,5 @@
 
 .table-add-transaction textArea{
 	width: 100%;
-	resize:none;
+	resize: none;
 }

@@ -46,7 +46,8 @@ var viewTransactionsCtrlF = function($scope, $http) {
 						break
 					}
 				}
-				$scope.$broadcast("refreshTotalBalance")
+				$scope.$root.$broadcast("refreshTotalBalance")
+				$scope.$root.$broadcast("refreshDashboard")
 			}, function(error){
 				console.log(error)
 			})
@@ -101,6 +102,7 @@ var addTransactionCtrlF = function($scope, $http) {
 				$scope.desc = ""
 				$scope.amnt = 0.0
 				$scope.$root.$broadcast("refreshTotalBalance") // $root car non parent de TotalBalanceCtrl
+				$scope.$root.$broadcast("refreshDashboard")
 			}, function(error) {
 				console.log(error)
 			})
@@ -115,7 +117,7 @@ var totalBalanceCtrlF = function($scope, $http){
 	$scope.owedToYou = ""
 	$scope.totalBalance = ""
 	$scope.calc = function() {
-		var myLogin = $scope.$parent.$parent.myLogin
+		var myLogin = $scope.$parent.myLogin
 		$http.get(server + "getTransactionShare/" + myLogin).then( 
 		function(result){
 			var trns = result.data
@@ -161,7 +163,40 @@ var totalBalanceCtrlF = function($scope, $http){
  * DashboardCtrl
  */
 var dashboardCtrlF = function($scope, $http) {
+	$scope.owedBy = []
+	$scope.owingTo = []
 
+	$scope.calc = function() {
+		var myLogin = $scope.$parent.myLogin
+		$http.get(server + "getTransactionShare/" + myLogin).then( 
+		function(result){
+			var trns = result.data
+	
+			for ( var i = 0; i < trns.length; ++i ){
+				var usrShr = trns[i].userShare
+				var payer = usrShr[0]
+				
+				// Si on a payé :
+				if ( payer.pseudo == myLogin ){
+					for ( var j = 1; j < usrShr.length; ++j ){
+						payer = usrShr[j]
+						$scope.owedBy.push( { "pseudo" : payer.pseudo, "amount" : payer.amount } )
+					}
+				// Si quelqu'un d'autre a payé
+				} else {
+					for ( var j = 1; j < usrShr.length; ++j ){
+						payer = usrShr[j]
+						if ( payer.pseudo == myLogin )
+							$scope.owedTo.push( { "pseudo" : usrShr[0].pseudo, "amount" : payer.amount } )
+					}
+				}
+			}
+		}, function(error){
+			console.log(error)
+		})
+	}
+	$scope.$on("refreshDashboard", $scope.calc)
+	$scope.calc()
 }
 
 splitwise.controller("MainPageCtrl", mainPageCtrlF)

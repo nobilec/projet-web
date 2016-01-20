@@ -1,16 +1,22 @@
-﻿<table>
+﻿<table class="table">
 	<tr>
 		<td>
 			<b>Vous devez :</b>
 		</td>
 		<td>
-			<b>L'on vous doit :</b>
+			<b>Vous est dû :</b>
 		</td>
 	</tr>
 	<tr>
 		<td>
+			<div ng-repeat="o in owingTo">
+				{{o.amount}} <b>€ à</b> {{o.pseudo}}
+			</div>
 		</td>
 		<td>
+			<div ng-repeat="i in owedBy">
+				{{i.amount}} <b>€ de</b> {{i.pseudo}}
+			</div>
 		</td>
 	</tr>
 </table>
