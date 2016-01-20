@@ -1,0 +1,47 @@
+<html>
+    <head>
+        
+        <title>Projet</title>
+
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <script src="js/bootstrap.min.js"></script>
+    
+    </head>
+    
+    <body class="spacer" ng-app="monApp" >
+
+        <!-- menu -->
+    <div ng-controller="inscriptioncontroller">
+        <div>
+            <label>Pseudo: <input type="text" name="pseudo" ng-model="user.pseudo"/></label><br/>
+            <label>Mot de passe: <input type="password" name="passe" ng-model="user.password"/></label><br/>
+            <label>Confirmation du mot de passe: <input type="password" name="passe2"/></label><br/>
+            <label>Adresse e-mail: <input type="text" name="email" ng-model="user.email"/></label><br/>
+            <input type="button" value="M'inscrire" ng-click="inscrpition()"/>
+        </div>
+    
+        <div>
+            <label>Adresse e-mail: <input type="text" name="email" ng-model="user.email"/></label><br/>
+            <label>Mot de passe: <input type="password" name="passe" ng-model="user.password"/></label><br/>
+            <input type="button" value="S'authauntifier" ng-click="login(email,password)"/>
+        </div>
+
+        <div>
+            <input type="button" value="Déconnection" ng-click="logout()"/>
+        </div>
+        
+        <div>
+            <label>Ajouter amis <input type="text" name="addfriend" ng-model="user.grp"/></label><br/>
+            <input type="button" value="Ajouter amis" ng-click="logout()"/>
+        </div>
+
+
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-resource.js"></script>
+        <script src="Lib/ng-session.js"></script>
+        <script src="Lib/app.js"></script>
+    </body>
+
+</html>
