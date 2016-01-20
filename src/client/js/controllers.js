@@ -1,7 +1,6 @@
 ﻿'use strict';
-var splitwise = angular.module("splitwise", [])
+var splitwise = angular.module("splitwise", ['ngResource'])
 var server = "http://localhost:3000/"
- 
  
  /*
   * MainPageCtrl
@@ -10,18 +9,35 @@ var mainPageCtrlF = function($scope, $http) {
 	$scope.atVisible = false
 	$scope.myLogin = "default" // Gérer la connexion
 	$scope.transactions = []
+	$scope.pages = 
+		[ 	{ "pageName" : "dashboard", "selected" : true},
+			{ "pageName" : "viewTransactions", "selected" : false},
+			{ "pageName" : "signUp", "selected" : false},
+			{ "pageName" : "logIn", "selected" : false} ]
 	
-	$scope.dashboardSelected = true
-	$scope.viewTransactionsSelected = false
-	
-	$scope.selectDashboard = function() {
-		$scope.dashboardSelected = true
-		$scope.viewTransactionsSelected = false
+	$scope.getSelectedPage = function() {
+		for ( var i = 0; i < $scope.pages.length; ++i )
+			if ( $scope.pages[i].selected )
+				return $scope.pages[i].pageName
+		return ""
 	}
 	
-	$scope.selectViewTransactions = function() {
-		$scope.dashboardSelected = false
-		$scope.viewTransactionsSelected = true
+	$scope.selectPage = function(pageName) {
+		for ( var i = 0; i < $scope.pages.length; ++i )
+			$scope.pages[i].selected = (pageName == $scope.pages[i].pageName)
+	}
+	
+	$scope.isPageSelected = function(pageName) {
+		for ( var i = 0; i < $scope.pages.length; ++i ){
+			var page = $scope.pages[i]
+			if ( pageName == page.pageName && page.selected )
+				return true
+		}
+		return false
+	}
+	
+	$scope.isPageTransactionRelated = function(pageName) {
+		return pageName == "dashboard" || pageName == "viewTransactions"
 	}
 	
 	$scope.toogleAddTransaction = function(){
@@ -245,8 +261,84 @@ var dashboardCtrlF = function($scope, $http) {
 	$scope.calc()
 }
 
+/*
+ * LoginCtrl
+ *
+ * Gère les utilisateurs et les amis
+ */
+var loginCtrlF = function($scope, $location, $resource){
+    var lien =$resource(server, {}, {
+        post: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        }
+    });
+    $scope.user;
+    var addUser = $resource(server + 'addUser', {}, {
+        post: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        }
+    });
+    addUser.post(function(user) {
+        }, function(errResponse) {
+        // fail
+        });
+    
+    $scope.inscription = function() {
+      if (($scope.user.email != "")&&($scope.user.pseudo != "")&&($scope.user.password != "")){
+        addUser.post($scope.user);
+      }
+        $location.path("/Accueil");
+    }
+
+    var getuser = $resource(server + 'GetUser', {}, {
+        post: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+			xhrFields: { withCredentials: true }
+        }
+    });
+    getuser.post(function(email) {
+      $scope.user = comms;
+        }, function(errResponse) {
+        // fail
+        });
+    
+    $scope.login = function(email,password) {
+      getuser.post(email);
+      if (($scope.user.email == email)&&($scope.user.password == password)){
+        $session.set($scope.user);
+        $location.path("/Dashboard");
+      }
+    }
+
+    $scope.logout = function() {
+        $scope.user = "";
+        $session.set($scope.user);
+        $location.path("/Accueil");
+      }
+
+    var addfriend = $resource(server + 'addfriend', {}, {
+        post: {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+			xhrFields: { withCredentials: true }
+        }
+    });
+    addfriend.post(function(req) {
+        }, function(errResponse) {
+        // fail
+        });
+    
+    $scope.addfriend = function(pseudo) {
+      addfriend.post({pseudo : $scope.user.pseudo, friend : pseudo})
+    }
+};
+
 splitwise.controller("MainPageCtrl", mainPageCtrlF)
 splitwise.controller("ViewTransactionsCtrl", viewTransactionsCtrlF)
 splitwise.controller("AddTransactionCtrl", addTransactionCtrlF)
 splitwise.controller("TotalBalanceCtrl", totalBalanceCtrlF)
 splitwise.controller("DashboardCtrl", dashboardCtrlF)
+splitwise.controller("LoginCtrl", loginCtrlF)

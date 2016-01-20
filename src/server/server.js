@@ -7,6 +7,8 @@ var app = express();
 var logger = require('morgan');
 
 app.use(logger());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
 mongoose.connect('mongodb://localhost/PROG', function(err) {
   if (err) { throw err; }
@@ -46,8 +48,9 @@ var transactionModel = mongoose.model('transactions', transactionSchema);
 
 app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", 'Content-Type, X-Requested-With');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+	res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", 'Content-Type, X-Requested-With, X-HTTP-Method-Override');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, DELETE, PUT');
     next();
 });
 
@@ -131,21 +134,71 @@ app.post('/Getfriend2groupe', function(req, res) {
     });
 });
 
+/*
+ *	Ajoute une transaction.
+ */
 app.post('/addTransaction', function(req, res) {
+	res.setHeader("Content-Type", "application/json")
     var newTransaction = new transactionModel({
-        userPaid : req.body.pseudo,
-        userShare :req.body.userShareList,
+        userPaid : req.body.userPaid,
+        userShare : req.body.userShare,
         groupeName : req.body.groupeName,
         description : req.body.description,
-        date : req.body.d
-        ate,
+        date : req.body.date,
         imageID : req.body.imageID,
         amount : req.body.amount
     });
-    newTransaction.save();
+    newTransaction.save(function (err, data) {
+		if (err) console.log(err);
+		res.json(newTransaction);
+	});
 });
+
+/*
+ * Renvoie toutes les transactions d'un utilistaeur.
+ */
+app.get("/getTransactions/:pseudo", function(req, res) {
+	res.setHeader("Content-Type", "application/json")
+	var query = transactionModel.find({userPaid : req.params.pseudo})
+	query.exec(function(errs, comms) {
+		if (errs) {
+			res.status(500).send(errs)
+			throw errs
+		}
+		res.json(comms)
+	})
+})
+
+/*
+ * Supprime une transaction.
+ * Pourquoi "get"? Parce que delete echoue.
+ */
+app.get("/delTransaction/:id", function(req, res) {
+	res.setHeader("Content-Type", "application/json");
+	
+	var query = transactionModel.remove({_id: req.params.id})
+	query.exec(function(errs, comms){
+		if (errs) {
+			res.status(500).send(errs)
+			throw errs
+		}
+		res.json(comms)
+	})
+})
+
 app.post('/GetTransaction', function(req, res) {
     var query = transactionModel.find({ userPaid : req.body.pseudo});
+
+    query.exec(function (err, comms) {
+        if (err) { throw err; }
+        res.type('application/json');
+        res.json(comms);
+    });
+
+});
+
+app.get('/getTransactionShare/:pseudo', function(req, res) {
+    var query = transactionModel.find({ userShare :{ $elemMatch: {pseudo: req.params.pseudo}}});
 
     query.exec(function (err, comms) {
         if (err) { throw err; }
