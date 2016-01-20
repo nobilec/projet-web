@@ -2,30 +2,47 @@
 var splitwise = angular.module("splitwise", [])
 var server = "http://localhost:3000/"
  
+ 
  /*
-  * CONTROLEURS :
+  * MainPageCtrl
   */
-
+var mainPageCtrlF = function($scope, $http) {
+	$scope.atVisible = false
+	$scope.myLogin = "default" // Gérer la connexion
+	$scope.transactions = []
+	
+	$scope.dashboardSelected = true
+	$scope.viewTransactionsSelected = false
+	
+	$scope.selectDashboard = function() {
+		$scope.dashboardSelected = true
+		$scope.viewTransactionsSelected = false
+	}
+	
+	$scope.selectViewTransactions = function() {
+		$scope.dashboardSelected = false
+		$scope.viewTransactionsSelected = true
+	}
+	
+	$scope.toogleAddTransaction = function(){
+		$scope.atVisible = !$scope.atVisible
+	}
+}
+ 
 /*
+ * ViewTransactionsCtrl
+ *
  * A faire :
  * - Prendre en compte le pseudo de l'utilisateur
  *   connecté dans la requête GET.
  */
 var viewTransactionsCtrlF = function($scope, $http) {
-	$scope.atVisible = false
-	$scope.myLogin = "default" // Gérer la connexion
-	$scope.transactions = []
-	
-	$scope.toogle = function(){
-		$scope.atVisible = !$scope.atVisible
-	}
-	
 	$scope.remove = function(tId){
 		$http.get(server + "delTransaction/" + tId.toString()).then(
 			function(result){
-				for ( var i = 0; i < $scope.transactions.length; ++i ){
-					if ( $scope.transactions[i]._id == tId ){
-						$scope.transactions.splice(i, 1)
+				for ( var i = 0; i < $scope.$parent.transactions.length; ++i ){
+					if ( $scope.$parent.transactions[i]._id == tId ){
+						$scope.$parent.transactions.splice(i, 1)
 						break
 					}
 				}
@@ -37,13 +54,15 @@ var viewTransactionsCtrlF = function($scope, $http) {
 	
 	$http.get(server + "getTransactions/" + $scope.myLogin).then( 
 		function(result){
-			$scope.transactions = result.data
+			$scope.$parent.transactions = result.data
 		}, function(error){
 			console.log(error)
 		})
 }
 
 /* 
+ * AddTransactionCtrl 
+ *
  * A faire :
  * - Ajouter le pseudo de l'utilisateur connecté ;
  * - Le prendre en compte dans le calcul des parts ;
@@ -76,7 +95,7 @@ var addTransactionCtrlF = function($scope, $http) {
 		
 		$http.post(server + "addTransaction", $scope.transaction).then(
 			function(result) {
-				$scope.$parent.toogle()
+				$scope.$parent.toogleAddTransaction()
 				$scope.$parent.transactions.push(result.data)
 				$scope.usrs = ""
 				$scope.desc = ""
@@ -88,12 +107,15 @@ var addTransactionCtrlF = function($scope, $http) {
 	}
 }
 
+/*
+ * TotalBalanceCtrl
+ */
 var totalBalanceCtrlF = function($scope, $http){
 	$scope.owedToOthers = ""
 	$scope.owedToYou = ""
 	$scope.totalBalance = ""
 	$scope.calc = function() {
-		var myLogin = $scope.$parent.myLogin
+		var myLogin = $scope.$parent.$parent.myLogin
 		$http.get(server + "getTransactionShare/" + myLogin).then( 
 		function(result){
 			var trns = result.data
@@ -135,6 +157,15 @@ var totalBalanceCtrlF = function($scope, $http){
 	$scope.calc()
 }
 
+/*
+ * DashboardCtrl
+ */
+var dashboardCtrlF = function($scope, $http) {
+
+}
+
+splitwise.controller("MainPageCtrl", mainPageCtrlF)
 splitwise.controller("ViewTransactionsCtrl", viewTransactionsCtrlF)
 splitwise.controller("AddTransactionCtrl", addTransactionCtrlF)
 splitwise.controller("TotalBalanceCtrl", totalBalanceCtrlF)
+splitwise.controller("DashboardCtrl", dashboardCtrlF)

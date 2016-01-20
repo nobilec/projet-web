@@ -7,8 +7,10 @@
 		<link rel="stylesheet" href="design/font-awesome/css/font-awesome.min.css" type="text/css">
 		<link rel="stylesheet" href="design/css/animate.min.css" type="text/css">
 		<link rel="stylesheet" href="design/css/creative.css" type="text/css">
+		<link rel="stylesheet" href="design/css/custom.css" type="text/css">
 	</head>
 	<body>
+		<!-- MENU DE NAVIGATION -->
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -17,13 +19,31 @@
 			</div>
 		</nav>
 		
-		<div ng-controller="ViewTransactionsCtrl">
-			<div ng-include="'partials/totalBalance.html'" ng-show="true"></div>
-			<input class="btn-info" type="button" value="Ajouter une transaction" ng-click="toogle()"/>
-			<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"></div><!-- -->
-			
-			<div ng-include="'partials/viewTransactions.html'" ng-show="true"></div><!-- -->
-		</div>
+		<!-- PAGE PRINCIPALE -->
+		<table class="table-home" ng-controller="MainPageCtrl">
+			<tr>
+				<td class="left-panel">
+					<table class="table-hover">
+						<tr><td><input class="btn-default" value="Tableau de bord" ng-click="selectDashboard()"/></td></tr>
+						<tr><td><input class="btn-default" value="Toutes les depenses"ng-click="selectViewTransactions()"/><td></tr>
+					</table>
+				</td>
+				
+				<td class="main-board">
+					<div ng-include="'partials/totalBalance.html'" ng-show="true"></div>
+					<input class="btn-info" type="button" value="Ajouter une transaction" ng-click="toogleAddTransaction()"/>
+					<div ng-include="'partials/addTransaction.html'" ng-show="atVisible"></div>
+					
+					<div ng-controller="DashboardCtrl" ng-show="dashboardSelected">
+						<div ng-include="'partials/dashboard.html'" ng-show="true"></div>
+					</div>
+					
+					<div ng-controller="ViewTransactionsCtrl" ng-show="viewTransactionsSelected">
+						<div ng-include="'partials/viewTransactions.html'" ng-show="true"></div>
+					</div>
+				</td>
+			</tr>
+		</table>
 		
 		<script src="./bower_components/angular/angular.js"></script>
 		<script src="./bower_components/jquery/dist/jquery.js"></script>

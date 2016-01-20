@@ -1,0 +1,22 @@
+﻿.table-home{
+	width: 100%;
+}
+
+.table-home td{
+	vertical-align: top;
+}
+
+.table-home .left-panel{
+}
+
+.table-home .main-board{
+	width: 100%;
+}
+
+.table-add-transaction{
+}
+
+.table-add-transaction textArea{
+	width: 100%;
+	resize:none;
+}

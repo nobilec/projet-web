@@ -1,7 +1,9 @@
 ﻿<div ng-controller="AddTransactionCtrl">
 	<form>
-		<p>Vous, et : <span><input ng-model="usrs"/></span> pour <span><input placeholder="Montant" ng-model="amnt"/></span> €</p>
-		<textArea placeholder="Description" ng-model="desc"></textArea><br/>
-		<input class="btn-success" type="button" value="Ajouter" ng-click="send()"/>
+		<table class="table-add-transaction">
+			<tr><td>Vous, et : <input ng-model="usrs"/> pour <input placeholder="Montant" ng-model="amnt"/> €</td></tr>
+			<tr><td><textArea placeholder="Description" ng-model="desc"></textArea></td></tr>
+			<tr><td><input class="btn-success" type="button" value="Ajouter" ng-click="send()"/></td></tr>
+		</table>
 	</form>
 </div>
