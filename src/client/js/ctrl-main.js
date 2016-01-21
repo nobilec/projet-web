@@ -1,9 +1,11 @@
 ﻿'use strict';
-var splitwise = angular.module("splitwise", [])
+var splitwise = angular.module("splitwise", ["ngCookies"])
 var server = "http://localhost:3000/"
 
-var mainCtrlF = function($scope, $http) {
-	$scope.connectedUser = ""
+var mainCtrlF = function($scope, $http, $cookieStore) {
+	var cuCookie = $cookieStore.get("connectedUser", $scope.connectedUser)
+	
+	$scope.connectedUser = (typeof cuCookie == "undefined") ? "" : cuCookie 
 	$scope.atVisible = false
 	$scope.transactions = []
 	$scope.pages = 
@@ -51,11 +53,15 @@ var mainCtrlF = function($scope, $http) {
 	
 	$scope.connectUser = function(userName){
 		$scope.connectedUser = userName
+		$cookieStore.put("connectedUser", userName)
 	}
 	
 	$scope.disconnectUser = function(){
 		$scope.connectedUser = ""
+		$cookieStore.put("connectedUser", $scope.connectedUser)
 	}
+	
+	
 	
 	$scope.refreshAllControllers = function(){
 		$scope.$root.$broadcast("refreshTotalBalance")
