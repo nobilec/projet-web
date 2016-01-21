@@ -1,11 +1,11 @@
 ﻿'use strict';
-var splitwise = angular.module("splitwise", ['ngResource'])
+var splitwise = angular.module("splitwise", ["ngResource", "ngSession"])
 var server = "http://localhost:3000/"
  
  /*
   * MainPageCtrl
   */
-var mainPageCtrlF = function($scope, $http) {
+var mainPageCtrlF = function($scope, $http, $session) {
 	$scope.atVisible = false
 	$scope.myLogin = "default" // Gérer la connexion
 	$scope.transactions = []
@@ -43,6 +43,14 @@ var mainPageCtrlF = function($scope, $http) {
 	$scope.toogleAddTransaction = function(){
 		$scope.atVisible = !$scope.atVisible
 	}
+	
+	$scope.getConnectedUser = function(){
+		return $session.get()
+	}
+	
+	$scope.isUserConnected = function(){
+		return $scope.getConnectedUser() != ""
+	}
 }
  
 /*
@@ -55,6 +63,8 @@ var mainPageCtrlF = function($scope, $http) {
 var viewTransactionsCtrlF = function($scope, $http) {
 	$scope.whoOwesWho = ""
 	$scope.amountOwed = 0.0
+	//console.log("SESSION LOGIN : " + $session.get() )
+	console.log("CONNECTED USER = " + $scope.$parent.getConnectedUser())
 
 	$scope.remove = function(tId){
 		$http.get(server + "delTransaction/" + tId.toString()).then(
@@ -266,7 +276,7 @@ var dashboardCtrlF = function($scope, $http) {
  *
  * Gère les utilisateurs et les amis
  */
-var loginCtrlF = function($scope, $location, $resource){
+var loginCtrlF = function($scope, $location, $resource, $session){
     var lien =$resource(server, {}, {
         post: {
             method: 'POST',

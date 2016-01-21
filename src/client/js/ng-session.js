@@ -3,7 +3,7 @@
 /*
 * A Session service.
 */
-angular.module('ngSession', ['ngCookie'])
+angular.module('ngSession', ['ngCookies'])
   .factory('$session', ['$cookieStore', function(cookies) {
     return new function() {
       /*
