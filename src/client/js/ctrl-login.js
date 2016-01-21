@@ -8,7 +8,7 @@
 var loginCtrlF = function($scope, $http){
 	
 	// Inscription :
-	$scope.suUsername = "";
+	/*$scope.suUsername = "";
 	$scope.suPassword = "";
 	$scope.suConfirmPassword = "";
 	$scope.suMail = "";
@@ -16,12 +16,22 @@ var loginCtrlF = function($scope, $http){
 	// Connexion :
 	$scope.liPassword = "";
 	$scope.liMail = "";
-	
-    $scope.user = {};
 
-	// FUNCTIONS :
-		
-    $scope.inscription = function() {
+	$scope.user = {};*/
+	
+	var init = function() {
+		console.log("INIT LOGINCTRL")
+		$scope.suUsername = "";
+		$scope.suPassword = "";
+		$scope.suConfirmPassword = "";
+		$scope.suMail = "";
+		$scope.liPassword = "";
+		$scope.liMail = "";
+		$scope.user = {};
+	}
+	init() 
+	
+    $scope.inscription = function(username, password, mail) {
 		$scope.user = {
 			"pseudo" : "",
 			"email" : "",
@@ -30,19 +40,16 @@ var loginCtrlF = function($scope, $http){
 			"groupes" : [{"groupeName" : ""}]
 		};
 		
-		$scope.user.pseudo = "clovis"//$scope.suUsername;
-		$scope.user.email = "a@a.fr"//$scope.suEmail;
-		$scope.user.password = "mdp"//$scope.suPassword;
-		
-		console.log("suUsername = " + $scope.suUsername)
-		console.log("user = " + $scope.user)
-		console.log("user.pseudo = " + $scope.user.pseudo)
+		$scope.user.pseudo = username;
+		$scope.user.email = mail;
+		$scope.user.password = password;
 		
 		if (($scope.user.email != "") && ($scope.user.pseudo != "") && ($scope.user.password != "")){
-			console.log("ON VA POST :")
-			
 			$http.post(server + "addUser/", $scope.user).then(
 				function(result) {
+					console.log("Avant : " + $scope.suUsername );
+					init();
+					console.log("Apres : " + $scope.suUsername );
 				}, function(error) {
 					console.log(error)
 				})
@@ -55,7 +62,9 @@ var loginCtrlF = function($scope, $http){
 					$scope.user = result.data[0]
 					
 					if (($scope.user.email == email) && ($scope.user.password == password)){
-						$scope.$parent.connectUser($scope.user.pseudo)
+						$scope.$parent.connectUser($scope.user.pseudo);
+						$scope.$parent.refreshAllControllers();
+						init();
 					}
 				}, function(error){
 					console.log(error)

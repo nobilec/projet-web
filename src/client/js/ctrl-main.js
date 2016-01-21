@@ -1,9 +1,8 @@
 ﻿'use strict';
-var splitwise = angular.module("splitwise", ["ngResource", "ngSession"])
+var splitwise = angular.module("splitwise", [])
 var server = "http://localhost:3000/"
 
-var mainCtrlF = function($scope, $http, $session) {
-	//$scope.connectedUserSKey = "connUsr"
+var mainCtrlF = function($scope, $http) {
 	$scope.connectedUser = ""
 	$scope.atVisible = false
 	$scope.transactions = []
@@ -43,15 +42,6 @@ var mainCtrlF = function($scope, $http, $session) {
 	}
 	
 	$scope.getConnectedUser = function(){
-		/*
-		 * Quand connexion ok :
-		 *  > return $session.get()
-		 */
-		 //return "default"
-		 /*var cUsr = $session.get($scope.connectedUserSKey)
-		 console.log("CONNECTED USER : " + cUsr)
-		 return cUsr*/
-		 console.log("connectedUser = " + $scope.connectedUser)
 		 return $scope.connectedUser
 	}
 	
@@ -65,6 +55,12 @@ var mainCtrlF = function($scope, $http, $session) {
 	
 	$scope.disconnectUser = function(){
 		$scope.connectedUser = ""
+	}
+	
+	$scope.refreshAllControllers = function(){
+		$scope.$root.$broadcast("refreshTotalBalance")
+		$scope.$root.$broadcast("refreshDashboard")
+		$scope.$root.$broadcast("refreshViewTransactions")
 	}
 }
 

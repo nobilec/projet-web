@@ -61,7 +61,11 @@ app.post('/addUser', function(req, res) {
 		pseudo : req.body.pseudo,
         email : req.body.email,
         password : req.body.password });
-    newUser.save();
+		
+    newUser.save(function (err, data) {
+		if (err) console.log(err);
+		res.json(newUser);
+	});
 });
 
 app.get('/testserver', function(req, res) {
@@ -162,7 +166,6 @@ app.post('/addTransaction', function(req, res) {
     newTransaction.save(function (err, data) {
 		if (err) console.log(err);
 		res.json(newTransaction);
-		console.log(newTransaction)
 	});
 });
 
