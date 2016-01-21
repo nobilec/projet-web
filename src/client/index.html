@@ -17,6 +17,7 @@
 					<a class="navbar-brand" href="#">Le site.</a>
 				</div>
 				<ul class="nav navbar-nav">
+				<li ng-show="isUserConnected()"><a href="#">Bienvenue, {{getConnectedUser()}}.</a></li>
 				<li><a href="#" ng-controller="LoginCtrl" ng-show="isUserConnected()" ng-click="logout()">Se déconnecter</a></li>
 			</div>
 		</nav>

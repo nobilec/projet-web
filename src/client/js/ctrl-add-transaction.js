@@ -65,7 +65,6 @@
 			$scope.transaction.amount = $scope.amnt
 			
 			if ( $scope.$parent.isUserConnected() ) {
-				console.log("AJOUT TR : " + $scope.transaction.userPaid )
 				$http.post(server + "addTransaction", $scope.transaction).then(
 					function(result) {
 						$scope.$parent.toogleAddTransaction()
