@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost/PROG', function(err) {
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var userSchema = new mongoose.Schema({
-    _id : ObjectId,
+    //_id : ObjectId,
     pseudo : String,
     email : String,
     password : String,
@@ -26,7 +26,7 @@ var userSchema = new mongoose.Schema({
 var userModel = mongoose.model('users', userSchema);
 
 var groupeSchema = new mongoose.Schema({
-    _id : ObjectId,
+    //_id : ObjectId,
     owner : String,
     name : String,
     members :[{pseudo :String}]
@@ -35,7 +35,7 @@ var groupeModel = mongoose.model('groupes', groupeSchema);
 
 
 var transactionSchema = new mongoose.Schema({
-    _id : ObjectId,
+    //_id : ObjectId,
     userPaid : String,
     userShare :[{pseudo : String, amount : Number}],
     groupeName : String,
@@ -151,6 +151,7 @@ app.post('/addTransaction', function(req, res) {
     newTransaction.save(function (err, data) {
 		if (err) console.log(err);
 		res.json(newTransaction);
+		console.log(newTransaction)
 	});
 });
 
