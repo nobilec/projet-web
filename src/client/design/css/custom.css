@@ -25,6 +25,13 @@
 	width: 100%;
 	resize: none;
 }
+
 .errors {
 	color: red;
+}
+
+.table-login {
+	border: none;
+	vertical-align: top;
+	margin: auto;
 }

@@ -24,20 +24,17 @@
 		<!-- PAGE PRINCIPALE -->
 		<table class="table-home">
 			<tr>
+				<!-- MENU D'INTERACTIONS -->
 				<td class="left-panel" ng-show="isUserConnected()">
 					<table class="table-hover">
 						<tr><td><input class="btn-default" type="button" value="Tableau de bord" ng-click="selectPage('dashboard')"/></td></tr>
 						<tr><td><input class="btn-default" type="button" value="Mes factures" ng-click="selectPage('viewTransactions')"/><td></tr>
 					</table>
+					<div ng-controller="LoginCtrl" ng-include="'partials/addFriends.html'"></div>
 				</td>
 				
+				<!-- PANNEAU PRINCIPAL -->
 				<td class="main-board">
-					
-					<div ng-controller="LoginCtrl">
-						<div ng-include="'partials/signUp.html'" ng-show="isPageSelected('signUp')"></div>
-						<div ng-include="'partials/logIn.html'" ng-show="isPageSelected('logIn')"></div>
-					</div>
-					
 					<div ng-show="isUserConnected() && isPageTransactionRelated(getSelectedPage())">
 						<div ng-include="'partials/totalBalance.html'" ng-show="true"></div>
 						<input class="btn-info" type="button" value="Ajouter une transaction" ng-click="toogleAddTransaction()"/>
@@ -51,8 +48,8 @@
 							<div ng-include="'partials/viewTransactions.html'" ng-show="true"></div>
 						</div>
 					</div>
-					<div ng-show="!isUserConnected()" >
-						<div ng-include="'partials/signUp.html'"></div>
+					
+					<div ng-controller="LoginCtrl" ng-show="!isUserConnected()" >
 						<div ng-include="'partials/logIn.html'"></div>
 					</div>
 				</td>
