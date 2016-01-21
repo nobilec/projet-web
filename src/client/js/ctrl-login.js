@@ -7,7 +7,7 @@
  */
 var loginCtrlF = function($scope, $http){
 	var init = function() {
-		$scope.inputs = {}
+		$scope.inputs = {};
 		$scope.inputs.suUsername = "";
 		$scope.inputs.suPassword = "";
 		$scope.inputs.suConfirmPassword = "";
@@ -15,10 +15,15 @@ var loginCtrlF = function($scope, $http){
 		$scope.inputs.liPassword = "";
 		$scope.inputs.liMail = "";
 		$scope.inputs.user = {};
+		$scope.outputs = {};
+		$scope.outputs.errors = "";
+		$scope.outputs.liErrors = "";
+		$scope.outputs.messages = "";
 	}
 	init() 
 	
     $scope.inscription = function(username, password, mail) {
+		$scope.outputs.messages = ""
 		$scope.user = {
 			"pseudo" : "",
 			"email" : "",
@@ -26,21 +31,39 @@ var loginCtrlF = function($scope, $http){
 			"friends" : [{"pseudo" : ""}] ,
 			"groupes" : [{"groupeName" : ""}]
 		};
-		
-		console.log("INSCRIPTION : " + username + " ; " + mail + " ; " + password)
 		$scope.user.pseudo = username;
 		$scope.user.email = mail;
 		$scope.user.password = password;
 		
 		if (($scope.user.email != "") && ($scope.user.pseudo != "") && ($scope.user.password != "")){
-			$http.post(server + "addUser/", $scope.user).then(
+		
+			$http.get(server + "getUser/" + mail).then( // Verification mail unique
 				function(result) {
-					console.log("Avant : " + $scope.inputs.suUsername );
-					init();
-					console.log("Apres : " + $scope.inputs.suUsername );
+					if ( typeof result.data[0] != "undefined" ){
+						$scope.outputs.errors = "Cette adresse e-mail existe déjà.\n";
+					} else {
+						$http.get(server + "getUserByPseudo/" + username).then( // Verification pseudo unique
+							function(result) {
+								if ( typeof result.data[0] != "undefined" ){
+									$scope.outputs.errors = "Ce nom d'utilisateur existe déjà.\n";
+								} else {
+									$http.post(server + "addUser/", $scope.user).then(
+										function(result) {
+											init();
+											$scope.outputs.messages = "Inscription réalisée avec succès.";
+										}, function(error) {
+											console.log(error);
+										})
+								}
+							}, function(error) {
+								console.log(error);
+							})
+					}
 				}, function(error) {
-					console.log(error)
+					console.log(error);
 				})
+		} else {
+			$scope.outputs.errors = "Tous les champs ne sont pas remplis.\n";
 		}
 	}
     
@@ -49,10 +72,14 @@ var loginCtrlF = function($scope, $http){
 				function(result){
 					$scope.user = result.data[0]
 					
-					if (($scope.user.email == email) && ($scope.user.password == password)){
-						$scope.$parent.connectUser($scope.user.pseudo);
-						$scope.$parent.refreshAllControllers();
-						init();
+					if ( typeof result.data[0] != "undefined" ){
+						if (($scope.user.email == email) && ($scope.user.password == password)){
+							$scope.$parent.connectUser($scope.user.pseudo);
+							$scope.$parent.refreshAllControllers();
+							init();
+						}
+					} else {
+						$scope.outputs.liErrors = "Identifiants incorrects."
 					}
 				}, function(error){
 					console.log(error)

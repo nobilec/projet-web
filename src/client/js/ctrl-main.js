@@ -61,8 +61,6 @@ var mainCtrlF = function($scope, $http, $cookieStore) {
 		$cookieStore.put("connectedUser", $scope.connectedUser)
 	}
 	
-	
-	
 	$scope.refreshAllControllers = function(){
 		$scope.$root.$broadcast("refreshTotalBalance")
 		$scope.$root.$broadcast("refreshDashboard")

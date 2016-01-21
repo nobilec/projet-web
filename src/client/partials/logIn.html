@@ -13,6 +13,8 @@
 							ng-click="inscription(inputs.suUsername, inputs.suPassword, inputs.suMail)"/>	
 						</td><td></td></tr>
 				</table>
+				<div class="errors" >{{outputs.errors}}</div>
+				<div class="messages" >{{outputs.messages}}</div>
 			</form>
 		</td>
 		<td>
@@ -24,6 +26,7 @@
 					<tr><td><input class="btn-success" type="button" value="S'authentifier" 
 						ng-click="login(inputs.liMail, inputs.liPassword)"/></td><td></td></tr>
 				</table>
+				<div class="errors" >{{outputs.liErrors}}</div>
 			</form>
 		</td>
 	</tr>

@@ -139,6 +139,16 @@ app.get('/getUser/:email', function(req, res) {
     });
 });
 
+app.get('/getUserByPseudo/:pseudo', function(req, res) {
+    var query = userModel.find({ pseudo : req.params.pseudo});
+
+    query.exec(function (err, comms) {
+        if (err) { throw err; }
+        res.type('application/json');
+        res.json(comms);
+    });
+});
+
 app.post('/Getfriend2groupe', function(req, res) {
     var query = groupeModel.find({ name : req.body.groupeName});
 
