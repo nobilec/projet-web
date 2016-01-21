@@ -7,6 +7,7 @@
 		$scope.paidByYou = true
 		$scope.payer = ""
 		$scope.errors = ""
+		$scope.participants = []
 	}
 	init()
 	
@@ -15,6 +16,9 @@
 	}
 	$scope.payOther = function() {
 		$scope.paidByYou = false
+	}
+	$scope.updateParticipants = function(){
+		$scope.participants = $scope.usrs.split(" ")
 	}
 	
 	$scope.send = function() {
