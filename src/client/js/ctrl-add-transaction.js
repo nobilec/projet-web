@@ -48,7 +48,7 @@
 				$scope.transaction.userShare[1] = { "pseudo" : myLogin, "amount" : amntDiv }
 				for ( var i = 0; i < usrsTab.length; ++i ){
 					if ( i != payerIndex )
-						$scope.transaction.userShare[1] = { "pseudo" : usrsTab[i], "amount" : amntDiv }
+						$scope.transaction.userShare[i+2] = { "pseudo" : usrsTab[i], "amount" : amntDiv }
 				}
 				
 			} else {

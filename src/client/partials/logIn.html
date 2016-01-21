@@ -4,12 +4,13 @@
 			<form>
 				<b>Inscription : </b>
 				<table class="table">
-					<tr><td><label>Pseudo: </label></td><td><input type="text" ng-model="suUsername"/></td></tr>
-					<tr><td><label>Mot de passe: </label></td><td><input type="password" ng-model="suPassword"/></td></tr>
-					<tr><td><label>Confirmation du mot de passe: </label></td><td><input type="password" ng-model="suConfirmPassword"/></td></tr>
-					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" ng-model="suMail"/></td></tr>
+					<tr><td><label>Pseudo: </label></td><td><input type="text" ng-model="inputs.suUsername"/></td></tr>
+					<tr><td><label>Mot de passe: </label></td><td><input type="password" ng-model="inputs.suPassword"/></td></tr>
+					<tr><td><label>Confirmation du mot de passe: </label></td><td><input type="password" ng-model="inputs.suConfirmPassword"/></td></tr>
+					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" ng-model="inputs.suMail"/></td></tr>
 					<tr><td>
-						<input class="btn-success" type="button" value="S'inscrire" ng-click="inscription(suUsername, suPassword, suMail)"/>	
+						<input class="btn-success" type="button" value="S'inscrire"
+							ng-click="inscription(inputs.suUsername, inputs.suPassword, inputs.suMail)"/>	
 						</td><td></td></tr>
 				</table>
 			</form>
@@ -18,9 +19,10 @@
 			<form>
 				<b>Connexion : </b>
 				<table class="table">
-					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" ng-model="liMail"/></td></tr>
-					<tr><td><label>Mot de passe: </label></td><td><input type="password" ng-model="liPassword"/></td></tr>
-					<tr><td><input class="btn-success" type="button" value="S'authentifier" ng-click="login(liMail, liPassword)"/></td><td></td></tr>
+					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" ng-model="inputs.liMail"/></td></tr>
+					<tr><td><label>Mot de passe: </label></td><td><input type="password" ng-model="inputs.liPassword"/></td></tr>
+					<tr><td><input class="btn-success" type="button" value="S'authentifier" 
+						ng-click="login(inputs.liMail, inputs.liPassword)"/></td><td></td></tr>
 				</table>
 			</form>
 		</td>

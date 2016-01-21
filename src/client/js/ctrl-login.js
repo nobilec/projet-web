@@ -6,28 +6,15 @@
  * Gère les utilisateurs et les amis
  */
 var loginCtrlF = function($scope, $http){
-	
-	// Inscription :
-	/*$scope.suUsername = "";
-	$scope.suPassword = "";
-	$scope.suConfirmPassword = "";
-	$scope.suMail = "";
-	
-	// Connexion :
-	$scope.liPassword = "";
-	$scope.liMail = "";
-
-	$scope.user = {};*/
-	
 	var init = function() {
-		console.log("INIT LOGINCTRL")
-		$scope.suUsername = "";
-		$scope.suPassword = "";
-		$scope.suConfirmPassword = "";
-		$scope.suMail = "";
-		$scope.liPassword = "";
-		$scope.liMail = "";
-		$scope.user = {};
+		$scope.inputs = {}
+		$scope.inputs.suUsername = "";
+		$scope.inputs.suPassword = "";
+		$scope.inputs.suConfirmPassword = "";
+		$scope.inputs.suMail = "";
+		$scope.inputs.liPassword = "";
+		$scope.inputs.liMail = "";
+		$scope.inputs.user = {};
 	}
 	init() 
 	
@@ -40,6 +27,7 @@ var loginCtrlF = function($scope, $http){
 			"groupes" : [{"groupeName" : ""}]
 		};
 		
+		console.log("INSCRIPTION : " + username + " ; " + mail + " ; " + password)
 		$scope.user.pseudo = username;
 		$scope.user.email = mail;
 		$scope.user.password = password;
@@ -47,9 +35,9 @@ var loginCtrlF = function($scope, $http){
 		if (($scope.user.email != "") && ($scope.user.pseudo != "") && ($scope.user.password != "")){
 			$http.post(server + "addUser/", $scope.user).then(
 				function(result) {
-					console.log("Avant : " + $scope.suUsername );
+					console.log("Avant : " + $scope.inputs.suUsername );
 					init();
-					console.log("Apres : " + $scope.suUsername );
+					console.log("Apres : " + $scope.inputs.suUsername );
 				}, function(error) {
 					console.log(error)
 				})
