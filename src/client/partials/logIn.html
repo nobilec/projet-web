@@ -4,10 +4,10 @@
 			<form>
 				<b>Inscription : </b>
 				<table class="table">
-					<tr><td><label>Pseudo: </label></td><td><input type="text" name="pseudo" ng-model="user.pseudo"/></td></tr>
-					<tr><td><label>Mot de passe: </label></td><td><input type="password" name="passe" ng-model="user.password"/></td></tr>
-					<tr><td><label>Confirmation du mot de passe: </label></td><td><input type="password" name="passe2"/></td></tr>
-					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" name="email" ng-model="user.email"/></td></tr>
+					<tr><td><label>Pseudo: </label></td><td><input type="text" name="pseudo" ng-model="suUsername"/></td></tr>
+					<tr><td><label>Mot de passe: </label></td><td><input type="password" name="passe" ng-model="suPassword"/></td></tr>
+					<tr><td><label>Confirmation du mot de passe: </label></td><td><input type="password" name="passe2" ng-model="suConfirmPassword"/></td></tr>
+					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" name="email" ng-model="suMail"/></td></tr>
 					<tr><td><input class="btn-success" type="button" value="S'inscrire" ng-click="inscription()"/></td><td></td></tr>
 				</table>
 			</form>
@@ -16,9 +16,9 @@
 			<form>
 				<b>Connexion : </b>
 				<table class="table">
-					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" name="email" ng-model="user.email"/></td></tr>
-					<tr><td><label>Mot de passe: </label></td><td><input type="password" name="passe" ng-model="user.password"/></td></tr>
-					<tr><td><input class="btn-success" type="button" value="S'authentifier" ng-click="login(email,password)"/></td><td></td></tr>
+					<tr><td><label>Adresse e-mail: </label></td><td><input type="text" name="email" ng-model="liMail"/></td></tr>
+					<tr><td><label>Mot de passe: </label></td><td><input type="password" name="passe" ng-model="liPassword"/></td></tr>
+					<tr><td><input class="btn-success" type="button" value="S'authentifier" ng-click="login(liMail, liPassword)"/></td><td></td></tr>
 				</table>
 			</form>
 		</td>

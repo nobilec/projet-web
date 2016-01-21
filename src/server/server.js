@@ -9,6 +9,7 @@ var logger = require('morgan');
 app.use(logger());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
+app.disable('etag');
 
 mongoose.connect('mongodb://localhost/PROG', function(err) {
   if (err) { throw err; }
@@ -56,9 +57,8 @@ app.all('/*', function(req, res, next) {
 
 
 app.post('/addUser', function(req, res) {
-
-
-    var newUser = new userModel({ pseudo : req.body.pseudo,
+    var newUser = new userModel({ 
+		pseudo : req.body.pseudo,
         email : req.body.email,
         password : req.body.password });
     newUser.save();
@@ -124,6 +124,17 @@ app.post('/GetUser', function(req, res) {
         res.json(comms);
     });
 });
+
+app.get('/getUser/:email', function(req, res) {
+    var query = userModel.find({ email : req.params.email});
+
+    query.exec(function (err, comms) {
+        if (err) { throw err; }
+        res.type('application/json');
+        res.json(comms);
+    });
+});
+
 app.post('/Getfriend2groupe', function(req, res) {
     var query = groupeModel.find({ name : req.body.groupeName});
 

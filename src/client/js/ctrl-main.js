@@ -3,6 +3,8 @@ var splitwise = angular.module("splitwise", ["ngResource", "ngSession"])
 var server = "http://localhost:3000/"
 
 var mainCtrlF = function($scope, $http, $session) {
+	//$scope.connectedUserSKey = "connUsr"
+	$scope.connectedUser = ""
 	$scope.atVisible = false
 	$scope.transactions = []
 	$scope.pages = 
@@ -45,12 +47,24 @@ var mainCtrlF = function($scope, $http, $session) {
 		 * Quand connexion ok :
 		 *  > return $session.get()
 		 */
-		 return "default"
-		 //return $session.get()
+		 //return "default"
+		 /*var cUsr = $session.get($scope.connectedUserSKey)
+		 console.log("CONNECTED USER : " + cUsr)
+		 return cUsr*/
+		 console.log("connectedUser = " + $scope.connectedUser)
+		 return $scope.connectedUser
 	}
 	
 	$scope.isUserConnected = function(){
 		return $scope.getConnectedUser() != ""
+	}
+	
+	$scope.connectUser = function(userName){
+		$scope.connectedUser = userName
+	}
+	
+	$scope.disconnectUser = function(){
+		$scope.connectedUser = ""
 	}
 }
 

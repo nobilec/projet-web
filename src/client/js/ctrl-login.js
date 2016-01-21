@@ -1,70 +1,78 @@
-﻿var loginCtrlF = function($scope, $location, $resource, $session){
-    var lien =$resource(server, {}, {
-        post: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        }
-    });
-    $scope.user;
-    var addUser = $resource(server + 'addUser', {}, {
-        post: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        }
-    });
-    addUser.post(function(user) {
-        }, function(errResponse) {
-        // fail
-        });
-    
-    $scope.inscription = function() {
-      if (($scope.user.email != "")&&($scope.user.pseudo != "")&&($scope.user.password != "")){
-        addUser.post($scope.user);
-      }
-        $location.path("/Accueil");
-    }
+﻿var server = "http://localhost:3000/"
 
-    var getuser = $resource(server + 'GetUser', {}, {
-        post: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-			xhrFields: { withCredentials: true }
-        }
-    });
-    getuser.post(function(email) {
-      $scope.user = comms;
-        }, function(errResponse) {
-        // fail
-        });
+/*
+ * LoginCtrl
+ *
+ * Gère les utilisateurs et les amis
+ */
+var loginCtrlF = function($scope, $http){
+	
+	// Inscription :
+	$scope.suUsername = "";
+	$scope.suPassword = "";
+	$scope.suConfirmPassword = "";
+	$scope.suMail = "";
+	
+	// Connexion :
+	$scope.liPassword = "";
+	$scope.liMail = "";
+	
+    $scope.user = {};
+
+	// FUNCTIONS :
+		
+    $scope.inscription = function() {
+		$scope.user = {
+			"pseudo" : "",
+			"email" : "",
+			"password" : "",
+			"friends" : [{"pseudo" : ""}] ,
+			"groupes" : [{"groupeName" : ""}]
+		};
+		
+		$scope.user.pseudo = "clovis"//$scope.suUsername;
+		$scope.user.email = "a@a.fr"//$scope.suEmail;
+		$scope.user.password = "mdp"//$scope.suPassword;
+		
+		console.log("suUsername = " + $scope.suUsername)
+		console.log("user = " + $scope.user)
+		console.log("user.pseudo = " + $scope.user.pseudo)
+		
+		if (($scope.user.email != "") && ($scope.user.pseudo != "") && ($scope.user.password != "")){
+			console.log("ON VA POST :")
+			
+			$http.post(server + "addUser/", $scope.user).then(
+				function(result) {
+				}, function(error) {
+					console.log(error)
+				})
+		}
+	}
     
-    $scope.login = function(email,password) {
-      getuser.post(email);
-      if (($scope.user.email == email)&&($scope.user.password == password)){
-        $session.set($scope.user);
-        $location.path("/Dashboard");
-      }
+    $scope.login = function(email, password) {
+		$http.get(server + "getUser/" + email).then( 
+				function(result){
+					$scope.user = result.data[0]
+					
+					if (($scope.user.email == email) && ($scope.user.password == password)){
+						$scope.$parent.connectUser($scope.user.pseudo)
+					}
+				}, function(error){
+					console.log(error)
+				})
     }
 
     $scope.logout = function() {
-        $scope.user = "";
-        $session.set($scope.user);
-        $location.path("/Accueil");
-      }
-
-    var addfriend = $resource(server + 'addfriend', {}, {
-        post: {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-			xhrFields: { withCredentials: true }
-        }
-    });
-    addfriend.post(function(req) {
-        }, function(errResponse) {
-        // fail
-        });
+		$scope.user = {};
+		$scope.$parent.disconnectUser()
+	}
     
     $scope.addfriend = function(pseudo) {
-      addfriend.post({pseudo : $scope.user.pseudo, friend : pseudo})
+	  $http.post(server + "addfriend/", {pseudo : $scope.user.pseudo, friend : pseudo}).then(
+		function(result) {
+		}, function(error) {
+			console.log(error)
+		})
     }
 };
 
