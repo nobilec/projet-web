@@ -4,7 +4,7 @@
   "description": "projet de web",
   "main": "index.js",
   "scripts": {
-	"postinstall" : "mongod && mongo src/server/scripts/postinstall.js",
+	"postinstall" : "mongo src/server/scripts/postinstall.js",
 	"start": "node src/server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
