@@ -1,4 +1,4 @@
-use PROG;
+use nobilec_projet-web;
 db.users.insert({ "_id" : ObjectId("56a16731131362fc177cf991"),"pseudo" : "test", "email" : "test@test.fr", "password" : "test", "groupes" : [ ], "friends" : [ ], "__v" : 0 });
 db.users.insert({ "_id" : ObjectId("56a16781131362fc177cf992"), "pseudo" : "toto", "email" : "toto@toto.fr", "password" : "toto", "groupes" : [ ], "friends" : [ ], "__v" : 0 });
 db.users.insert({ "_id" : ObjectId("56a1678f131362fc177cf993"), "pseudo" : "tutu", "email" : "tutu@tutu.fr", "password" : "tutu", "groupes" : [ ], "friends" : [ ], "__v" : 0 });

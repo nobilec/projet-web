@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 app.disable('etag');
 
-mongoose.connect('mongodb://localhost/PROG', function(err) {
+mongoose.connect('mongodb://localhost/nobilec_projet-web', function(err) {
   if (err) { throw err; }
 });
 var ObjectId = mongoose.Schema.Types.ObjectId;
